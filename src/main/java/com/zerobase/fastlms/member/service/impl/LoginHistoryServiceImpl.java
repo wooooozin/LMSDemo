@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -24,5 +25,18 @@ public class LoginHistoryServiceImpl {
                 .loginTime(LocalDateTime.now())
                 .build();
         return loginHistoryRepository.save(loginHistory);
+    }
+
+    public LocalDateTime getLastLoginTime(String userId) {
+        LoginHistory lastLogin = loginHistoryRepository.findByUserIdOrderByLogInTimeDesc(userId);
+        if (lastLogin != null) {
+            return lastLogin.getLoginTime();
+        } else {
+            return null;
+        }
+    }
+
+    public List<LoginHistory> getAllLoginHistory(String userId) {
+        return loginHistoryRepository.findAllByUserIdOrderByLoginTimeDesc(userId);
     }
 }
