@@ -1,17 +1,21 @@
 package com.zerobase.fastlms.admin.controller;
 
 
+import com.zerobase.fastlms.admin.dto.LoginHistoryDto;
 import com.zerobase.fastlms.admin.dto.MemberDto;
 import com.zerobase.fastlms.admin.model.MemberInput;
 import com.zerobase.fastlms.admin.model.MemberParam;
 import com.zerobase.fastlms.course.controller.BaseController;
+import com.zerobase.fastlms.member.entity.LoginHistory;
 import com.zerobase.fastlms.member.service.MemberService;
+import com.zerobase.fastlms.member.service.impl.LoginHistoryServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -19,6 +23,7 @@ import java.util.List;
 public class AdminMemberController extends BaseController {
     
     private final MemberService memberService;
+    private final LoginHistoryServiceImpl loginHistoryService;
     
     @GetMapping("/admin/member/list.do")
     public String list(Model model, MemberParam parameter) {
@@ -47,7 +52,20 @@ public class AdminMemberController extends BaseController {
         
         MemberDto member = memberService.detail(parameter.getUserId());
         model.addAttribute("member", member);
-       
+
+        List<LoginHistory> loginHistories = loginHistoryService.getAllLoginHistory(parameter.getUserId());
+
+        List<LoginHistoryDto> loginHistoryDtoArrayList = new ArrayList<>();
+        int totalCount = loginHistories.size();
+        int i = 0;
+        for(LoginHistory loginHistory : loginHistories) {
+            LoginHistoryDto dto = LoginHistoryDto.of(loginHistory);
+            dto.setSeq(totalCount - i);
+            loginHistoryDtoArrayList.add(dto);
+            i++;
+        }
+        model.addAttribute("loginHistories", loginHistoryDtoArrayList);
+
         return "admin/member/detail";
     }
     

@@ -98,8 +98,26 @@
 
         <div>
             <a href="list.do"> 목록 </a>
-
         </div>
+        <!-- 로그인 기록 추가 부분 -->
+        <table>
+            <thead>
+            <tr>
+                <th>NO</th>
+                <th>로그인 일시</th>
+                <th>접속 IP</th>
+                <th>접속 User Agent</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="login : ${loginHistories}">
+                <td th:text="${login.seq}">1</td>
+                <td th:text="${login.getLastLoginText()}"></td>
+                <td th:text="${login.ipAddress}"></td>
+                <td th:text="${login.userAgent}"></td>
+            </tr>
+            </tbody>
+        </table>
 
 
     </div>
