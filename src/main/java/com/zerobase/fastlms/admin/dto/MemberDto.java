@@ -31,7 +31,8 @@ public class MemberDto {
     
     boolean adminYn;
     String userStatus;
-    
+    LocalDateTime lastLogin;
+
     private String zipcode;
     private String addr;
     private String addrDetail;
@@ -57,7 +58,8 @@ public class MemberDto {
                 .resetPasswordLimitDt(member.getResetPasswordLimitDt())
                 .adminYn(member.isAdminYn())
                 .userStatus(member.getUserStatus())
-                
+                .lastLogin(member.getLastLogin())
+
                 .zipcode(member.getZipcode())
                 .addr(member.getAddr())
                 .addrDetail(member.getAddrDetail())
@@ -74,7 +76,11 @@ public class MemberDto {
     public String getUdtDtText() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm:ss");
         return udtDt != null ? udtDt.format(formatter) : "";
-        
+    }
+
+    public String getLastLoginText() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm:ss");
+        return lastLogin != null ? lastLogin.format(formatter) : "";
     }
     
 }

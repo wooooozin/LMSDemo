@@ -3,6 +3,7 @@ package com.zerobase.fastlms.main.controller;
 
 import com.zerobase.fastlms.components.MailComponents;
 import com.zerobase.fastlms.member.service.impl.LoginHistoryServiceImpl;
+import com.zerobase.fastlms.member.service.impl.MemberServiceImpl;
 import com.zerobase.fastlms.util.RequestUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.time.LocalDateTime;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -23,6 +25,7 @@ public class MainController {
 
     private final MailComponents mailComponents;
     private final LoginHistoryServiceImpl loginHistoryService; // 주입
+    private final MemberServiceImpl memberService;
 
     @RequestMapping("/")
     public String index(HttpServletRequest request) {
@@ -44,6 +47,7 @@ public class MainController {
         log.info(userId);
         if (userId != "anonymousUser") {
             loginHistoryService.saveLoginHistory(userId, clientsIp, userAgent);
+            memberService.updateLastLogin(userId, LocalDateTime.now());
         }
 
         return "index";

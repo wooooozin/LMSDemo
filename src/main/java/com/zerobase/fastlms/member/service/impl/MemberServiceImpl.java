@@ -24,7 +24,6 @@ import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -153,7 +152,7 @@ public class MemberServiceImpl implements MemberService {
         }
         
         Member member = optionalMember.get();
-        
+
         return MemberDto.of(member);
     }
     
@@ -190,7 +189,20 @@ public class MemberServiceImpl implements MemberService {
         return true;
         
     }
-    
+
+    @Override
+    public boolean updateLastLogin(String userId, LocalDateTime lastLogin) {
+        Optional<Member> member = memberRepository.findById(userId);
+        if (member.isPresent()) {
+            Member findMember = member.get();
+            findMember.setLastLogin(lastLogin);
+            memberRepository.save(findMember);
+            return true;
+        }
+
+        return false;
+    }
+
     @Override
     public ServiceResult updateMember(MemberInput parameter) {
         

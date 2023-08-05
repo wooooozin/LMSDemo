@@ -28,7 +28,7 @@ public class LoginHistoryServiceImpl {
     }
 
     public LocalDateTime getLastLoginTime(String userId) {
-        LoginHistory lastLogin = loginHistoryRepository.findByUserIdOrderByLogInTimeDesc(userId);
+        LoginHistory lastLogin = loginHistoryRepository.findByUserIdOrderByLoginTimeDesc(userId);
         if (lastLogin != null) {
             return lastLogin.getLoginTime();
         } else {
