@@ -6,7 +6,11 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
     <style>
-        .swiper {width: 600px;}
+        .swiper {width: 800px;margin: 0;}
+        .swiper .swiper-pagination {top: auto;bottom: 0;}
+        .swiper .swiper-button-next:after, .swiper .swiper-button-prev:after {color: #fff;}
+        .swiper .swiper-link {display: block;}
+        .swiper .swiper-link > img {width: 100%;}
     </style>
 </head>
 <body>
@@ -17,7 +21,7 @@
     <div class="swiper-wrapper">
         <th:block th:each="banner : ${banners}" th:if="${banner.displayYn == true}">
             <div class="swiper-slide">
-                <a th:href="@{${banner.getUrl()}}" th:target="${banner.getTarget()}">
+                <a th:href="@{${banner.getUrl()}}" th:target="${banner.getTarget()}" class="swiper-link">
                     <img th:src="@{'data:image/png;base64,' + ${banner.getImageBase64()}}" th:alt="${banner.getAltText()}" />
                 </a>
             </div>
