@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +23,11 @@ public class BannerDto {
     private String target;
     private int sortOrder;
     private boolean displayYn;
+    private LocalDateTime regDt; // 등록일 필드 추가
+
+    //추가컬럼
+    long totalCount;
+    long seq;
 
     public static List<BannerDto> of(List<Banner> banners) {
         if (banners != null) {
@@ -44,6 +50,7 @@ public class BannerDto {
                 .target(banner.getTarget())
                 .sortOrder(banner.getSortOrder())
                 .displayYn(banner.isDisplayYn())
+                .regDt(banner.getRegDate())
                 .build();
     }
 }
