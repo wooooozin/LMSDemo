@@ -6,6 +6,7 @@ import com.zerobase.fastlms.admin.model.BannerInput;
 import com.zerobase.fastlms.admin.model.BannerParam;
 import com.zerobase.fastlms.admin.repository.BannerRepository;
 import com.zerobase.fastlms.admin.mapper.BannerMapper;
+import com.zerobase.fastlms.course.dto.CourseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -13,6 +14,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -66,5 +68,41 @@ public class BannerService {
             }
         }
         return list;
+    }
+
+    public BannerDto getById(long id) {
+        return bannerRepository.findById(id).map(BannerDto::of).orElse(null);
+    }
+
+    public boolean saveOrUpdateBanner(BannerInput bannerInput) {
+        MultipartFile imageFile = bannerInput.getImage();
+        byte[] imageBytes = null;
+
+        if (imageFile != null && !imageFile.isEmpty()) {
+            try {
+                imageBytes = imageFile.getBytes();
+            } catch (IOException e) {
+                e.printStackTrace();
+                return false;
+            }
+        }
+
+        Banner banner = null;
+        if (bannerInput.getId() != null && bannerInput.getId() > 0) {
+            banner = bannerRepository.findById(bannerInput.getId())
+                    .orElseThrow(() -> new IllegalArgumentException("배너가 존재하지 않습니다."));
+        } else {
+            banner = new Banner();
+        }
+
+        banner.setImage(imageBytes);
+        banner.setAltText(bannerInput.getAltText());
+        banner.setUrl(bannerInput.getUrl());
+        banner.setTarget(bannerInput.getTarget());
+        banner.setSortOrder(bannerInput.getSortOrder());
+        banner.setDisplayYn(bannerInput.isDisplayYn());
+
+        bannerRepository.save(banner);
+        return true;
     }
 }

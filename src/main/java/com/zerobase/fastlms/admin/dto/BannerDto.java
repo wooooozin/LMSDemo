@@ -7,7 +7,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 
 @Builder
@@ -23,7 +25,7 @@ public class BannerDto {
     private String target;
     private int sortOrder;
     private boolean displayYn;
-    private LocalDateTime regDt; // 등록일 필드 추가
+    private LocalDateTime regDate; // 등록일 필드 추가
 
     //추가컬럼
     long totalCount;
@@ -50,7 +52,16 @@ public class BannerDto {
                 .target(banner.getTarget())
                 .sortOrder(banner.getSortOrder())
                 .displayYn(banner.isDisplayYn())
-                .regDt(banner.getRegDate())
+                .regDate(banner.getRegDate())
                 .build();
+    }
+
+    public String getRegDateText() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm:ss");
+        return regDate != null ? regDate.format(formatter) : "";
+    }
+
+    public String getImageBase64() {
+        return Base64.getEncoder().encodeToString(this.image);
     }
 }
